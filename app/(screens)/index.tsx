@@ -1,5 +1,10 @@
 import React from 'react';
-import { View, Text, Button, ImageBackground, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
+
+import Button from '@/components/ui/Button';
+
+import landingBg from  '../../assets/images/landingBg.png'
 
 type HomeScreenProps = {
   navigation: any; // Type for navigation prop
@@ -7,43 +12,45 @@ type HomeScreenProps = {
 
 const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   return (
-    <ImageBackground
-    //   source={require('./assets/background.jpg')} // Update path if necessary
+    <View
       style={styles.container}
     >
-      <View style={styles.overlay}>
-        <Text style={styles.title}>Welcome to My App</Text>
-        <Button
-          title="Get Started"
-          onPress={() => navigation.navigate('LoginScreen')} // Navigate to the Home screen
-          color="#fff"
-        />
+      <StatusBar style="light" />
+
+      <Image source={landingBg} />
+      <View>
+      <Text style={styles.title}>Mobile Banking with world loves</Text>
+      <Text style={styles.subTitle}>Lorem ipsum dolor sit amet consectetur adipisicing elit.</Text>
+      <Button
+        title="Get Started"
+        variant='light'
+        onPress={() => navigation.navigate('LoginScreen')} // Navigate to the Home screen
+      />
       </View>
-    </ImageBackground>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
-  },
-  overlay: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent overlay
-    width: '100%',
-    height: '100%',
-    padding:30
+    backgroundColor:'#181818',
+    paddingVertical:100
   },
   title: {
-    fontSize: 30,
-    fontWeight: 'bold',
+    fontSize: 36,
+    fontWeight: '300',
     color: '#fff',
     marginBottom: 20,
   },
+  subTitle:{
+    fontSize:20,
+    fontWeight: '200',
+    color: '#fff',
+    marginBottom:20
+  }
 });
 
 export default HomeScreen;

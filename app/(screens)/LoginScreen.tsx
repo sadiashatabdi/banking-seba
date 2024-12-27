@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { useNavigation } from 'expo-router';
 import Icon from 'react-native-vector-icons/Feather'; // You can choose other icons if needed
+
+import Button from '@/components/ui/Button';
 
 interface LoginFormValues {
   email: string;
@@ -66,14 +68,19 @@ const LoginScreen: React.FC = () => {
               
             </View>
             {touched.password && errors.password && <Text style={styles.error}>{errors.password}</Text>}
-            <TouchableOpacity onPress={()=>navigation.navigate('ForgotPasswordScreen' as never)}><Text>Forget Password?</Text></TouchableOpacity>
-            <Button title="Login" onPress={() => handleSubmit()} />
+            <View style={styles.forgotPassContainer}>
+              <TouchableOpacity onPress={()=>navigation.navigate('ForgotPasswordScreen' as never)}>
+                <Text>Forget Password?</Text>
+              </TouchableOpacity>
+            </View>
+            <Button title="Login" variant='dark' onPress={() => handleSubmit()} />
           </View>
         )}
       </Formik>
-      <Text>Don't have account? </Text>
-
-      <Button title="Register" onPress={() => navigation.navigate('RegistrationScreen' as never)} />
+      <View style={styles.bottomActionContainer}>
+        <Text style={styles.textCenter}>Don't have account? </Text>
+        <Button title="Register" onPress={() => navigation.navigate('RegistrationScreen' as never)} />
+      </View>
     </View>
   );
 };
@@ -109,6 +116,17 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     width: '100%',
   },
+  forgotPassContainer:{
+    flexDirection:'row-reverse',
+    marginBottom:20
+  },
+  bottomActionContainer:{
+    marginTop:50,
+    gap:10,
+  },
+  textCenter:{
+    textAlign:'center'
+  }
 });
 
 export default LoginScreen;
