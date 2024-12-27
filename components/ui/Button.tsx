@@ -35,9 +35,9 @@ const Button: React.FC<ButtonProps> = ({ variant = 'light', disabled = false, on
 
 const styles = StyleSheet.create({
   button: {
-    paddingVertical: 12,
+    paddingVertical: 18,
     paddingHorizontal: 24,
-    borderRadius: 25,  // Rounded corners
+    borderRadius: 30,  // Rounded corners
     justifyContent: 'center',
     alignItems: 'center',
   },

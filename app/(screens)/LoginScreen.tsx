@@ -6,6 +6,7 @@ import { useNavigation } from 'expo-router';
 import Icon from 'react-native-vector-icons/Feather'; // You can choose other icons if needed
 
 import Button from '@/components/ui/Button';
+import Input from '@/components/ui/Input';
 
 interface LoginFormValues {
   email: string;
@@ -34,7 +35,6 @@ const LoginScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -42,32 +42,21 @@ const LoginScreen: React.FC = () => {
       >
         {({ values, handleChange, handleBlur, handleSubmit, touched, errors }) => (
           <View>
-            <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.input}
-              placeholder="Email"
-              value={values.email}
-              onChangeText={handleChange('email')}
-              onBlur={handleBlur('email')}
-            />
-            </View>
-            {touched.email && errors.email && <Text style={styles.error}>{errors.email}</Text>}
 
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.input}
-                placeholder="Password"
-                value={values.password}
-                onChangeText={handleChange('password')}
-                onBlur={handleBlur('password')}
-                secureTextEntry={!passwordVisible}
-              />
-              <TouchableOpacity onPress={() => setPasswordVisible(!passwordVisible)}>
-                <Icon name={passwordVisible ? 'eye-off' : 'eye'} size={20} color="gray" />
-              </TouchableOpacity>
-              
-            </View>
-            {touched.password && errors.password && <Text style={styles.error}>{errors.password}</Text>}
+            <Input placeholder="Email" 
+              value={values.email} 
+              onChangeText={handleChange('email')} 
+              onBlur={handleBlur('email')} 
+              errorMessage={errors.email}
+            />
+
+            <Input placeholder="Password" 
+              value={values.password} 
+              onChangeText={handleChange('password')} 
+              onBlur={handleBlur('password')} 
+              errorMessage={errors.password}
+              isPassword={true}
+            />
             <View style={styles.forgotPassContainer}>
               <TouchableOpacity onPress={()=>navigation.navigate('ForgotPasswordScreen' as never)}>
                 <Text>Forget Password?</Text>
@@ -89,32 +78,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    // alignItems: 'center',
-    padding: 16,
-  },
-  title: {
-    fontSize: 30,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  input: {
-    width: '90%',
-    height: 40,
-    paddingLeft: 8,
-  },
-  error: {
-    color: 'red',
-    fontSize: 12,
-    marginBottom: 10,
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 5,
-    marginBottom: 10,
-    width: '100%',
+    padding: 20,
+    backgroundColor:'white'
   },
   forgotPassContainer:{
     flexDirection:'row-reverse',

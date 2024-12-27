@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, ImageBackground } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 
 import Button from '@/components/ui/Button';
@@ -12,45 +12,37 @@ type HomeScreenProps = {
 
 const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   return (
-    <View
+    <ImageBackground
+      source={landingBg}
       style={styles.container}
     >
       <StatusBar style="light" />
-
-      <Image source={landingBg} />
       <View>
-      <Text style={styles.title}>Mobile Banking with world loves</Text>
-      <Text style={styles.subTitle}>Lorem ipsum dolor sit amet consectetur adipisicing elit.</Text>
+      <Text style={styles.title}>Your {'\n'}Ultimate{'\n'}Financial{'\n'}Companion</Text>
       <Button
         title="Get Started"
         variant='light'
         onPress={() => navigation.navigate('LoginScreen')} // Navigate to the Home screen
       />
       </View>
-    </View>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    justifyContent: 'flex-end',
     backgroundColor:'#181818',
-    paddingVertical:100
+    paddingVertical:100,
+    paddingHorizontal:20
   },
   title: {
-    fontSize: 36,
-    fontWeight: '300',
+    fontSize: 40,
+    fontWeight: '400',
     color: '#fff',
     marginBottom: 20,
   },
-  subTitle:{
-    fontSize:20,
-    fontWeight: '200',
-    color: '#fff',
-    marginBottom:20
-  }
 });
 
 export default HomeScreen;

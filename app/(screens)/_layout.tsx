@@ -21,11 +21,11 @@ export default function ScreenLayout() {
 
   return (
     <Stack.Navigator initialRouteName="HomeScreen">
-    <Stack.Screen name="HomeScreen" component={HomeScreen} options={{headerShown:false}} />
-    <Stack.Screen name="LoginScreen" component={LoginScreen} options={{headerShown:true, title:'Login'}} />
-    <Stack.Screen name="ForgotPasswordScreen" component={ForgotPasswordScreen} options={{headerShown:true, title:'Forgot Password'}} />
-    <Stack.Screen name="SetPasswordScreen" component={SetPasswordScreen} options={{headerShown:true, title: 'Set Password'}} />
-    <Stack.Screen name="RegistrationScreen" component={RegistrationScreen} options={{headerShown:true, title:'Registration'}} />
+      <Stack.Screen name="HomeScreen" component={HomeScreen} options={{headerShown:false}} />
+      <Stack.Screen name="LoginScreen" component={LoginScreen} options={{headerShown:true, title:'Login'}} />
+      <Stack.Screen name="ForgotPasswordScreen" component={ForgotPasswordScreen} options={{headerShown:true, title:'Forgot Password'}} />
+      <Stack.Screen name="SetPasswordScreen" component={SetPasswordScreen} options={{headerShown:true, title: 'Set Password'}} />
+      <Stack.Screen name="RegistrationScreen" component={RegistrationScreen} options={{headerShown:true, title:'Registration'}} />
   </Stack.Navigator>
   );
 }

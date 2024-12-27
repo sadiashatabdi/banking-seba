@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Alert } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { useNavigation } from 'expo-router';
+import Button from '@/components/ui/Button';
 
 // Interface for form values
 interface RegistrationFormValues {
@@ -24,8 +25,7 @@ const RegistrationScreen: React.FC = () => {
   };
 
   // Validation schema using Yup
-  const validationSchema = Yup.object({
-    name: Yup.string()
+  const validationSchema = Yup.object({    name: Yup.string()
       .min(4, 'Name must be at least 4 characters')
       .max(30, 'Name must not exceed 30 characters')
       .required('Name is required'),
@@ -50,6 +50,7 @@ const RegistrationScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
+
       <Text style={styles.title}>Register</Text>
       <Formik
         initialValues={initialValues}
