@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { View, StyleSheet, } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import Icon from 'react-native-vector-icons/Feather'; // You can choose other icons if needed
 import { useNavigation } from 'expo-router';
+import Input from '@/components/ui/Input';
+import Button from '@/components/ui/Button';
 
 // Interface for form values
 interface SetPasswordFormValues {
@@ -12,9 +13,7 @@ interface SetPasswordFormValues {
 }
 
 const SetPasswordScreen: React.FC = () => {
-  const [passwordVisible, setPasswordVisible] = useState(false); // State to toggle password visibility
-  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false); // State for confirm password visibility
-    const navigation = useNavigation()
+  const navigation = useNavigation()
   const initialValues: SetPasswordFormValues = {
     password: '',
     confirmPassword: '',
@@ -41,7 +40,6 @@ const SetPasswordScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Set Password</Text>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -57,40 +55,28 @@ const SetPasswordScreen: React.FC = () => {
         }) => (
           <View>
             {/* Password Input */}
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.input}
-                placeholder="Password"
-                value={values.password}
-                onChangeText={handleChange('password')}
-                onBlur={handleBlur('password')}
-                secureTextEntry={!passwordVisible}
-              />
-              <TouchableOpacity onPress={() => setPasswordVisible(!passwordVisible)}>
-                <Icon name={passwordVisible ? 'eye-off' : 'eye'} size={20} color="gray" />
-              </TouchableOpacity>
-            </View>
-            {touched.password && errors.password && <Text style={styles.error}>{errors.password}</Text>}
+            <Input
+              placeholder="Password"
+              value={values.password}
+              onChangeText={handleChange('password')}
+              onBlur={handleBlur('password')}
+              secureTextEntry={true}
+              isPassword={true}
+              touched={touched.password}
+              errorMessage={errors.password}
+            />
+            <Input
+              placeholder="Confirm Password"
+              value={values.confirmPassword}
+              onChangeText={handleChange('confirmPassword')}
+              onBlur={handleBlur('confirmPassword')}
+              secureTextEntry={true}
+              isPassword={true}
+              touched={touched.confirmPassword}
+              errorMessage={errors.confirmPassword}
+            />
 
-            {/* Confirm Password Input */}
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.input}
-                placeholder="Confirm Password"
-                value={values.confirmPassword}
-                onChangeText={handleChange('confirmPassword')}
-                onBlur={handleBlur('confirmPassword')}
-                secureTextEntry={!confirmPasswordVisible}
-              />
-              <TouchableOpacity onPress={() => setConfirmPasswordVisible(!confirmPasswordVisible)}>
-                <Icon name={confirmPasswordVisible ? 'eye-off' : 'eye'} size={20} color="gray" />
-              </TouchableOpacity>
-            </View>
-            {touched.confirmPassword && errors.confirmPassword && (
-              <Text style={styles.error}>{errors.confirmPassword}</Text>
-            )}
-
-            <Button title="Set Password" onPress={() => handleSubmit()} />
+            <Button title="Set Password" variant='dark' onPress={() => handleSubmit()} />
           </View>
         )}
       </Formik>
@@ -104,30 +90,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 16,
-  },
-  title: {
-    fontSize: 30,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 5,
-    marginBottom: 10,
-    width: '100%',
-  },
-  input: {
-    width: '90%',
-    height: 40,
-    paddingLeft: 8,
-  },
-  error: {
-    color: 'red',
-    fontSize: 12,
-    marginBottom: 10,
   },
 });
 

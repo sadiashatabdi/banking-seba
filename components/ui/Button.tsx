@@ -18,7 +18,7 @@ const Button: React.FC<ButtonProps> = ({ variant = 'light', disabled = false, on
 
   const textStyle = [
     styles.text,
-    variant === 'light'? styles.textLight:styles.textDark,
+    variant === 'light' ? styles.textLight : styles.textDark,
     disabled && styles.disabledText
   ];
 
@@ -42,7 +42,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   lightBackground: {
-    backgroundColor: 'white',  // Light variant background color
+    backgroundColor: 'white',
+    borderWidth: 1,
+    borderColor: '#d9d9d9'
   },
   darkBackground: {
     backgroundColor: '#181818',  // Dark variant background color
@@ -54,11 +56,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
-  textLight:{
-    color:'#181818'
+  textLight: {
+    color: '#181818'
   },
-  textDark:{
-    color:'white'
+  textDark: {
+    color: 'white'
   },
   disabledText: {
     color: '#a0a0a0',  // Disabled text color

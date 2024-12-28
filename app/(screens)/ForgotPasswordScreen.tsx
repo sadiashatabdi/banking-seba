@@ -1,8 +1,12 @@
 import React from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { useNavigation } from 'expo-router';
+import Input from '@/components/ui/Input';
+import TextView from '@/components/ui/TextView';
+
+import Button from '@/components/ui/Button';
 
 // Interface for form values
 interface ForgotPasswordFormValues {
@@ -28,7 +32,6 @@ const ForgotPasswordScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Forgot Password</Text>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -43,17 +46,19 @@ const ForgotPasswordScreen: React.FC = () => {
           errors,
         }) => (
           <View>
-            <TextInput
-              style={styles.input}
+            <Input
               placeholder="Enter your email"
               value={values.email}
               onChangeText={handleChange('email')}
               onBlur={handleBlur('email')}
+              touched={touched.email}
+              errorMessage={errors.email}
             />
-            {touched.email && errors.email && <Text style={styles.error}>{errors.email}</Text>}
 
-            <TouchableOpacity onPress={()=>navigation.navigate('LoginScreen' as never)}><Text>Can you remember password?</Text></TouchableOpacity>
-            <Button title="Send Reset Link" onPress={() => handleSubmit()} />
+            <TouchableOpacity onPress={() => navigation.navigate('LoginScreen' as never)}>
+              <TextView textAlign='right' marginBottom={10}>Can you remember password?</TextView>
+            </TouchableOpacity>
+            <Button title="Send Reset Link" variant='dark' onPress={() => handleSubmit()} />
           </View>
         )}
       </Formik>
@@ -66,25 +71,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     padding: 16,
-  },
-  title: {
-    fontSize: 30,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  input: {
-    width: '100%',
-    height: 40,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    marginBottom: 10,
-    paddingLeft: 8,
-    borderRadius: 5,
-  },
-  error: {
-    color: 'red',
-    fontSize: 12,
-    marginBottom: 10,
   },
 });
 

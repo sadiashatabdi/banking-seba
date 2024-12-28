@@ -1,24 +1,28 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Alert } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import Icon from 'react-native-vector-icons/Feather';
+
+import Input from '@/components/ui/Input';
+import Button from '@/components/ui/Button';
 
 interface ProfileFormValues {
   name: string;
   email: string;
   phone: string;
   password: string;
+  confirmPassword: string;
 }
 
 const UpdateProfileScreen: React.FC = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
-  
+
   const initialValues: ProfileFormValues = {
     name: '',
     email: 'user@example.com',  // Example email
     phone: '9876543210',  // Example phone
     password: '',
+    confirmPassword: '',
   };
 
   const validationSchema = Yup.object({
@@ -32,6 +36,9 @@ const UpdateProfileScreen: React.FC = () => {
       .matches(/[a-zA-Z]/, 'Password must contain letters')
       .matches(/\d/, 'Password must contain a number')
       .required('Password is required'),
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref('password')], 'Passwords must match')
+      .required('Confirm Password is required'),
   });
 
   const handleSubmit = (values: ProfileFormValues) => {
@@ -41,7 +48,6 @@ const UpdateProfileScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Update Profile</Text>
 
       <Formik
         initialValues={initialValues}
@@ -51,52 +57,56 @@ const UpdateProfileScreen: React.FC = () => {
         {({ values, handleChange, handleBlur, handleSubmit, touched, errors }) => (
           <View>
             {/* Name (Editable) */}
-            <TextInput
-              style={styles.input}
+            <Input
               placeholder="Name"
               value={values.name}
               onChangeText={handleChange('name')}
               onBlur={handleBlur('name')}
+              touched={touched.name}
+              errorMessage={errors.name}
             />
-            {touched.name && errors.name && <Text style={styles.error}>{errors.name}</Text>}
 
-            {/* Email (Disabled) */}
-            <TextInput
-              style={styles.input}
-              placeholder="Email"
+            <Input
+              placeholder="Name"
               value={values.email}
-              editable={false}
+              onChangeText={handleChange('email')}
+              onBlur={handleBlur('email')}
+              touched={touched.email}
+              errorMessage={errors.email}
+              disabled={true}
             />
 
-            {/* Phone (Disabled) */}
-            <TextInput
-              style={styles.input}
+            <Input
               placeholder="Phone"
               value={values.phone}
-              editable={false}
+              onChangeText={handleChange('phone')}
+              onBlur={handleBlur('phone')}
+              touched={touched.phone}
+              errorMessage={errors.phone}
+              disabled={true}
             />
 
-            {/* Password (Editable) */}
-            <View style={styles.passwordContainer}>
-              <TextInput
-                style={styles.input}
-                placeholder="Password"
-                value={values.password}
-                onChangeText={handleChange('password')}
-                onBlur={handleBlur('password')}
-                secureTextEntry={!passwordVisible}
-              />
-              {/* Eye Icon to toggle password visibility */}
-              <TouchableOpacity
-                style={styles.eyeIcon}
-                onPress={() => setPasswordVisible(!passwordVisible)}
-              >
-                <Icon name={passwordVisible ? 'eye-off' : 'eye'} size={20} color="#000" />
-              </TouchableOpacity>
-            </View>
-            {touched.password && errors.password && <Text style={styles.error}>{errors.password}</Text>}
-
-            <Button title="Update Profile" onPress={() => handleSubmit()} />
+            <Input
+              placeholder="Password"
+              value={values.password}
+              onChangeText={handleChange('password')}
+              onBlur={handleBlur('password')}
+              touched={touched.password}
+              errorMessage={errors.password}
+              isPassword={true}
+              secureTextEntry={true}
+            />
+            <Input
+              placeholder="Confirm Password"
+              value={values.confirmPassword}
+              onChangeText={handleChange('confirmPassword')}
+              onBlur={handleBlur('confirmPassword')}
+              secureTextEntry={true}
+              isPassword={true}
+              touched={touched.confirmPassword}
+              errorMessage={errors.confirmPassword}
+            />
+            <Button title="Update Profile" variant='dark' onPress={() => handleSubmit()} />
           </View>
         )}
       </Formik>
@@ -107,14 +117,7 @@ const UpdateProfileScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // justifyContent: 'center',
     padding: 16,
-  },
-  title: {
-    fontSize: 30,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    textAlign: 'center',
   },
   input: {
     width: '100%',

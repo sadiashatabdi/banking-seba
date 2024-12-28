@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { useNavigation } from 'expo-router';
-import Icon from 'react-native-vector-icons/Feather'; // You can choose other icons if needed
 
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
+import KeyboardAvoidingViewContainer from '@/components/ui/KeyboardAvoidingViewContainer';
 
 interface LoginFormValues {
   email: string;
@@ -14,7 +14,6 @@ interface LoginFormValues {
 }
 
 const LoginScreen: React.FC = () => {
-   const [passwordVisible, setPasswordVisible] = useState(false); // State to toggle password visibility
   const navigation = useNavigation()
   const initialValues: LoginFormValues = {
     email: 'sarower@mail.com',
@@ -27,50 +26,49 @@ const LoginScreen: React.FC = () => {
   });
 
   const handleLogin = (values: LoginFormValues) => {
-    // Here, you can handle the form submission (e.g., API call, navigate, etc.)
-    // Alert.alert('Login Successful', `Email: ${values.email}\nPassword: ${values.password}`);
-
     navigation.navigate('(tabs)' as never)
   };
 
   return (
-    <View style={styles.container}>
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        onSubmit={handleLogin}
-      >
-        {({ values, handleChange, handleBlur, handleSubmit, touched, errors }) => (
-          <View>
+    <KeyboardAvoidingViewContainer>
+      <View style={styles.container}>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={handleLogin}
+        >
+          {({ values, handleChange, handleBlur, handleSubmit, touched, errors }) => (
+            <View>
 
-            <Input placeholder="Email" 
-              value={values.email} 
-              onChangeText={handleChange('email')} 
-              onBlur={handleBlur('email')} 
-              errorMessage={errors.email}
-            />
+              <Input placeholder="Email"
+                value={values.email}
+                onChangeText={handleChange('email')}
+                onBlur={handleBlur('email')}
+                errorMessage={errors.email}
+              />
 
-            <Input placeholder="Password" 
-              value={values.password} 
-              onChangeText={handleChange('password')} 
-              onBlur={handleBlur('password')} 
-              errorMessage={errors.password}
-              isPassword={true}
-            />
-            <View style={styles.forgotPassContainer}>
-              <TouchableOpacity onPress={()=>navigation.navigate('ForgotPasswordScreen' as never)}>
-                <Text>Forget Password?</Text>
-              </TouchableOpacity>
+              <Input placeholder="Password"
+                value={values.password}
+                onChangeText={handleChange('password')}
+                onBlur={handleBlur('password')}
+                errorMessage={errors.password}
+                isPassword={true}
+              />
+              <View style={styles.forgotPassContainer}>
+                <TouchableOpacity onPress={() => navigation.navigate('ForgotPasswordScreen' as never)}>
+                  <Text>Forget Password?</Text>
+                </TouchableOpacity>
+              </View>
+              <Button title="Login" variant='dark' onPress={() => handleSubmit()} />
             </View>
-            <Button title="Login" variant='dark' onPress={() => handleSubmit()} />
-          </View>
-        )}
-      </Formik>
-      <View style={styles.bottomActionContainer}>
-        <Text style={styles.textCenter}>Don't have account? </Text>
-        <Button title="Register" onPress={() => navigation.navigate('RegistrationScreen' as never)} />
+          )}
+        </Formik>
+        <View style={styles.bottomActionContainer}>
+          <Text style={styles.textCenter}>Don't have account? </Text>
+          <Button title="Register" onPress={() => navigation.navigate('RegistrationScreen' as never)} />
+        </View>
       </View>
-    </View>
+    </KeyboardAvoidingViewContainer>
   );
 };
 
@@ -79,18 +77,18 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     padding: 20,
-    backgroundColor:'white'
+    backgroundColor: 'white'
   },
-  forgotPassContainer:{
-    flexDirection:'row-reverse',
-    marginBottom:20
+  forgotPassContainer: {
+    flexDirection: 'row-reverse',
+    marginBottom: 20
   },
-  bottomActionContainer:{
-    marginTop:50,
-    gap:10,
+  bottomActionContainer: {
+    marginTop: 50,
+    gap: 10,
   },
-  textCenter:{
-    textAlign:'center'
+  textCenter: {
+    textAlign: 'center'
   }
 });
 

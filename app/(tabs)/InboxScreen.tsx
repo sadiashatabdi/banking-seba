@@ -51,6 +51,7 @@ const InboxScreen: React.FC = () => {
         data={transactions}
         renderItem={renderTransactionItem}
         keyExtractor={(item) => item.id}
+        showsVerticalScrollIndicator={false}
       />
     </View>
   );
@@ -62,7 +63,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   transactionItem: {
-    backgroundColor: '#f8f8f8',
+    backgroundColor: '#FFFFFF',
     borderRadius: 8,
     padding: 12,
     marginBottom: 12,

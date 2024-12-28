@@ -20,7 +20,6 @@ export default function TabLayout() {
         tabBarBackground: TabBarBackground,
         tabBarStyle: Platform.select({
           ios: {
-            // Use a transparent background on iOS to show the blur effect
             position: 'absolute',
           },
           default: {},
@@ -30,7 +29,7 @@ export default function TabLayout() {
         name="index"
         options={{
           title: 'Dashboard',
-          headerShown:true,
+          headerShown: true,
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
         }}
       />
@@ -38,24 +37,24 @@ export default function TabLayout() {
         name="InboxScreen"
         options={{
           title: 'Inbox',
-          headerShown:true,
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          headerShown: true,
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="message.fill" color={color} />,
         }}
       />
       <Tabs.Screen
         name="UpdateProfileScreen"
         options={{
           title: 'Profile',
-          headerShown:true,
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          headerShown: true,
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="person" color={color} />,
         }}
       />
       <Tabs.Screen
         name="SupportScreen"
         options={{
           title: 'Support',
-          headerShown:true,
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          headerShown: true,
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="headphones" color={color} />,
         }}
       />
     </Tabs>

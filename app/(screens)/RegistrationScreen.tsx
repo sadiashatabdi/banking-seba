@@ -1,9 +1,12 @@
 import React from 'react';
-import { View, Text, TextInput, StyleSheet, Alert } from 'react-native';
+import { View, Text, StyleSheet, Alert } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { useNavigation } from 'expo-router';
 import Button from '@/components/ui/Button';
+import KeyboardAvoidingViewContainer from '@/components/ui/KeyboardAvoidingViewContainer';
+import Input from '@/components/ui/Input';
+import Gap from '@/components/ui/Gap';
 
 // Interface for form values
 interface RegistrationFormValues {
@@ -25,7 +28,8 @@ const RegistrationScreen: React.FC = () => {
   };
 
   // Validation schema using Yup
-  const validationSchema = Yup.object({    name: Yup.string()
+  const validationSchema = Yup.object({
+    name: Yup.string()
       .min(4, 'Name must be at least 4 characters')
       .max(30, 'Name must not exceed 30 characters')
       .required('Name is required'),
@@ -49,82 +53,75 @@ const RegistrationScreen: React.FC = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingViewContainer>
+      <View style={styles.container}>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={handleRegistration}
+        >
+          {({
+            values,
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            touched,
+            errors,
+          }) => (
+            <View>
+              <Input
+                placeholder="Full Name"
+                value={values.name}
+                onChangeText={handleChange('name')}
+                onBlur={handleBlur('name')}
+                errorMessage={errors.name}
+                touched={touched.name}
+              />
+              <Input
+                placeholder="Email"
+                value={values.email}
+                onChangeText={handleChange('email')}
+                onBlur={handleBlur('email')}
+                errorMessage={errors.email}
+                touched={touched.email}
+              />
+              <Input
+                placeholder="Phone Number"
+                value={values.phone}
+                onChangeText={handleChange('phone')}
+                onBlur={handleBlur('phone')}
+                errorMessage={errors.phone}
+                touched={touched.phone}
+                keyboardType='numeric'
+              />
+              <Input
+                placeholder="Password"
+                value={values.password}
+                onChangeText={handleChange('password')}
+                onBlur={handleBlur('password')}
+                errorMessage={errors.password}
+                touched={touched.password}
+              />
+              <Input
+                placeholder="Confirm Password"
+                value={values.confirmPassword}
+                onChangeText={handleChange('confirmPassword')}
+                onBlur={handleBlur('confirmPassword')}
+                errorMessage={errors.confirmPassword}
+                touched={touched.confirmPassword}
+              />
 
-      <Text style={styles.title}>Register</Text>
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        onSubmit={handleRegistration}
-      >
-        {({
-          values,
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          touched,
-          errors,
-        }) => (
-          <View>
-            <TextInput
-              style={styles.input}
-              placeholder="Full Name"
-              value={values.name}
-              onChangeText={handleChange('name')}
-              onBlur={handleBlur('name')}
-            />
-            {touched.name && errors.name && <Text style={styles.error}>{errors.name}</Text>}
+              <Button title="Register" variant='dark' onPress={() => handleSubmit()} />
+            </View>
+          )}
+        </Formik>
 
-            <TextInput
-              style={styles.input}
-              placeholder="Email"
-              value={values.email}
-              onChangeText={handleChange('email')}
-              onBlur={handleBlur('email')}
-            />
-            {touched.email && errors.email && <Text style={styles.error}>{errors.email}</Text>}
-
-            <TextInput
-              style={styles.input}
-              placeholder="Phone Number"
-              value={values.phone}
-              onChangeText={handleChange('phone')}
-              onBlur={handleBlur('phone')}
-              keyboardType="phone-pad"
-            />
-            {touched.phone && errors.phone && <Text style={styles.error}>{errors.phone}</Text>}
-
-            <TextInput
-              style={styles.input}
-              placeholder="Password"
-              value={values.password}
-              onChangeText={handleChange('password')}
-              onBlur={handleBlur('password')}
-              secureTextEntry
-            />
-            {touched.password && errors.password && <Text style={styles.error}>{errors.password}</Text>}
-
-            <TextInput
-              style={styles.input}
-              placeholder="Confirm Password"
-              value={values.confirmPassword}
-              onChangeText={handleChange('confirmPassword')}
-              onBlur={handleBlur('confirmPassword')}
-              secureTextEntry
-            />
-            {touched.confirmPassword && errors.confirmPassword && (
-              <Text style={styles.error}>{errors.confirmPassword}</Text>
-            )}
-
-            <Button title="Register" onPress={() => handleSubmit()} />
-          </View>
-        )}
-      </Formik>
-
-      <Text>Already have account? </Text>
-      
-      <Button title="Login" onPress={() => navigation.navigate('LoginScreen' as never)} />
-    </View>
+        <View style={styles.actionContainer}>
+          <Text>Already have account? </Text>
+          <Button title="Login" variant='light' onPress={() => navigation.navigate('LoginScreen' as never)} />
+        </View>
+      </View>
+    </KeyboardAvoidingViewContainer>
   );
 };
 
@@ -132,28 +129,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    // alignItems: 'center',
-    padding: 16,
+    padding: 20,
   },
-  title: {
-    fontSize: 30,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  input: {
-    width: '100%',
-    height: 40,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    marginBottom: 10,
-    paddingLeft: 8,
-    borderRadius: 5,
-  },
-  error: {
-    color: 'red',
-    fontSize: 12,
-    marginBottom: 10,
-  },
+  actionContainer: {
+    marginTop: 50,
+    gap: 10
+  }
 });
 
 export default RegistrationScreen;
