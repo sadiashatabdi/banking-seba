@@ -5,6 +5,8 @@ import * as Yup from 'yup';
 
 import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
+import Gap from '@/components/ui/Gap';
+import { useNavigation } from '@react-navigation/native';
 
 interface ProfileFormValues {
   name: string;
@@ -15,8 +17,7 @@ interface ProfileFormValues {
 }
 
 const UpdateProfileScreen: React.FC = () => {
-  const [passwordVisible, setPasswordVisible] = useState(false);
-
+  const navigation = useNavigation()
   const initialValues: ProfileFormValues = {
     name: '',
     email: 'user@example.com',  // Example email
@@ -107,6 +108,8 @@ const UpdateProfileScreen: React.FC = () => {
               errorMessage={errors.confirmPassword}
             />
             <Button title="Update Profile" variant='dark' onPress={() => handleSubmit()} />
+            <Gap size={50} />
+            <Button title="Logout" variant='light' onPress={() => navigation.navigate('(screens)' as never)} />
           </View>
         )}
       </Formik>
