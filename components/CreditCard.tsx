@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
     justifyContent: "space-between",
-    padding: 16,
+    padding: 30,
   },
   imageStyle: {
     borderRadius: 12,
@@ -83,11 +83,11 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   middleSection: {
-    alignItems: "center",
-    marginTop: 70,
+    alignItems: "flex-end",
+    marginTop: -20,
   },
   cardNumber: {
-    fontSize: 24,
+    fontSize: 22,
     color: "#fff",
     letterSpacing: 2,
   },
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   label: {
-    fontSize: 10,
+    fontSize: 12,
     color: "#FFFFFF",
     textTransform: "uppercase",
   },
