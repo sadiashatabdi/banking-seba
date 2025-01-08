@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { router, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import Container from "@/components/Container";
 import CreditCard from "@/components/CreditCard";
 import TextView from "@/components/ui/TextView";
@@ -12,11 +11,25 @@ import cashOut from "../../assets/images/cashOut.png";
 import makePayment from "../../assets/images/makePayment.png";
 import gift from "../../assets/images/gift.png";
 import donation from "../../assets/images/donation.png";
-import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const DashboardScreen = () => {
-  const navigation = useNavigation();
   const router = useRouter();
+
+  const [name, setName] = useState("");
+  const [balance, setBalance] = useState<string | null>(null);
+
+  useEffect(() => {
+    const getData = async () => {
+      const ubalance = await AsyncStorage.getItem("balance");
+      const uname = await AsyncStorage.getItem("name");
+
+      setName(uname ?? "Sarower");
+      setBalance(ubalance ?? "0");
+    };
+
+    getData();
+  }, []);
 
   const services = [
     {
@@ -54,8 +67,9 @@ const DashboardScreen = () => {
     <Container>
       <CreditCard
         cardNumber="1234567812345678"
-        cardHolder="SADIA SHATABDI"
+        cardHolder={name}
         expiryDate="12/30"
+        balance={balance}
       />
       <View style={styles.services}>
         {services.map((item, index) => (

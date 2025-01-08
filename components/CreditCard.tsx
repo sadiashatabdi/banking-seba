@@ -13,17 +13,17 @@ interface CreditCardProps {
   cardNumber: string;
   cardHolder: string;
   expiryDate: string;
+  balance: string | null;
 }
 
 const CreditCard: React.FC<CreditCardProps> = ({
   cardNumber,
   cardHolder,
   expiryDate,
+  balance = "0",
 }) => {
   const formatCardNumber = (number: string) =>
     number.replace(/(\d{4})/g, "$1 ").trim();
-
-  const [balance, setBalance] = useState("Your Balance");
 
   return (
     <View style={styles.card}>
@@ -33,8 +33,8 @@ const CreditCard: React.FC<CreditCardProps> = ({
         imageStyle={styles.imageStyle}
       >
         <View style={styles.topSection}>
-          <Pressable onPress={() => setBalance("2000.00 TK")}>
-            <Text style={styles.bankName}>{balance}</Text>
+          <Pressable>
+            <Text style={styles.bankName}>C/B: {balance} TK</Text>
           </Pressable>
           <Text style={styles.bankName}>Banking Seba</Text>
         </View>
