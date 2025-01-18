@@ -1,33 +1,49 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, StyleSheet, Alert } from "react-native";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import { useMutation } from "@tanstack/react-query";
+import { useRoute } from "@react-navigation/native";
 import { useNavigation } from "expo-router";
 
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import KeyboardAvoidingViewContainer from "@/components/ui/KeyboardAvoidingViewContainer";
+import Api from "@/services/Api";
 
-interface LoginFormValues {
-  phone: string;
+interface ServiceFormValue {
+  to: string;
   amount: number;
 }
 
 const ServiceScreen: React.FC = () => {
   const navigation = useNavigation();
-  const initialValues: LoginFormValues = {
-    phone: "01753945342",
-    amount: 100,
+  const route: any = useRoute();
+  const initialValues: ServiceFormValue = {
+    to: __DEV__ ? "01753945342" : "",
+    amount: __DEV__ ? 100 : 0,
   };
 
   const validationSchema = Yup.object({
-    phone: Yup.string().required("Phone number is required"),
+    to: Yup.string().required("Phone number is required"),
     amount: Yup.number().required("Amount is required"),
   });
 
-  const handleSend = (values: LoginFormValues) => {
-    navigation.navigate("ThankYouScreen" as never);
+  const handleSend = (values: any) => {
+    values.type = route.params?.type.toUpperCase() ?? "Send Money";
+    mutateAsync(values, {
+      onSuccess: () => {
+        navigation.navigate("ThankYouScreen" as never);
+      },
+      onError: (error) => {
+        Alert.alert("Transaction Error", error.message);
+      },
+    });
   };
+
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: (payload) => Api.post("transaction/send", payload, false),
+  });
 
   return (
     <KeyboardAvoidingViewContainer>
@@ -48,10 +64,10 @@ const ServiceScreen: React.FC = () => {
             <View>
               <Input
                 placeholder="Phone Number"
-                value={values.phone}
-                onChangeText={handleChange("phone")}
-                onBlur={handleBlur("phone")}
-                errorMessage={errors.phone}
+                value={values.to}
+                onChangeText={handleChange("to")}
+                onBlur={handleBlur("to")}
+                errorMessage={errors.to}
                 keyboardType="numeric"
               />
 

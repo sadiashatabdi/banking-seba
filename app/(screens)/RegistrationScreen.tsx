@@ -22,11 +22,11 @@ interface RegistrationFormValues {
 const RegistrationScreen: React.FC = () => {
   const navigation = useNavigation();
   const initialValues: RegistrationFormValues = {
-    name: "",
-    email: "",
-    phone: "",
-    password: "",
-    confirmPassword: "",
+    name: __DEV__ ? "Sadia Shatabdi" : "",
+    email: __DEV__ ? "sadia@mail.com" : "",
+    phone: __DEV__ ? "01757669549" : "",
+    password: __DEV__ ? "asdfasdf1234" : "",
+    confirmPassword: __DEV__ ? "asdfasdf1234" : "",
   };
 
   // Validation schema using Yup
@@ -118,6 +118,7 @@ const RegistrationScreen: React.FC = () => {
                 onBlur={handleBlur("password")}
                 errorMessage={errors.password}
                 touched={touched.password}
+                isPassword={true}
               />
               <Input
                 placeholder="Confirm Password"
@@ -126,6 +127,7 @@ const RegistrationScreen: React.FC = () => {
                 onBlur={handleBlur("confirmPassword")}
                 errorMessage={errors.confirmPassword}
                 touched={touched.confirmPassword}
+                isPassword={true}
               />
 
               <Button

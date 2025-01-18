@@ -2,14 +2,14 @@ import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useMutation } from "@tanstack/react-query";
 import { useNavigation } from "expo-router";
 
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import KeyboardAvoidingViewContainer from "@/components/ui/KeyboardAvoidingViewContainer";
-import { useMutation } from "@tanstack/react-query";
 import Api from "@/services/Api";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface LoginFormValues {
   email_or_phone: string;
@@ -19,8 +19,8 @@ interface LoginFormValues {
 const LoginScreen: React.FC = () => {
   const navigation = useNavigation();
   const initialValues: LoginFormValues = {
-    email_or_phone: "sadia@hello.com",
-    password: "123456",
+    email_or_phone: __DEV__ ? "sadia@mail.com" : "",
+    password: __DEV__ ? "asdfasdf1234" : "",
   };
 
   const validationSchema = Yup.object({
@@ -46,6 +46,7 @@ const LoginScreen: React.FC = () => {
         AsyncStorage.setItem("name", response.user.name);
         AsyncStorage.setItem("phone", response.user.phone);
         AsyncStorage.setItem("status", response.user.status);
+        AsyncStorage.setItem("created_at", response.user.created_at);
         navigation.navigate("(tabs)" as never);
       },
       onError(error) {
@@ -57,6 +58,7 @@ const LoginScreen: React.FC = () => {
         AsyncStorage.removeItem("name");
         AsyncStorage.removeItem("phone");
         AsyncStorage.removeItem("status");
+        AsyncStorage.removeItem("created_at");
       },
     });
   };

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
+import { View, TouchableOpacity, Image, StyleSheet, Text } from "react-native";
+import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import Container from "@/components/Container";
 import CreditCard from "@/components/CreditCard";
@@ -12,24 +13,41 @@ import makePayment from "../../assets/images/makePayment.png";
 import gift from "../../assets/images/gift.png";
 import donation from "../../assets/images/donation.png";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useIsFocused } from "@react-navigation/native";
+import Api from "@/services/Api";
 
 const DashboardScreen = () => {
   const router = useRouter();
+  const isFocused = useIsFocused();
 
   const [name, setName] = useState("");
   const [balance, setBalance] = useState<string | null>(null);
+  const [cardNumber, setCardNumber] = useState("");
+
+  const { data, refetch } = useQuery({
+    queryKey: ["user-balance"],
+    queryFn: () => Api.get("user/balance", {}),
+  });
 
   useEffect(() => {
     const getData = async () => {
+      const id = await AsyncStorage.getItem("id");
       const ubalance = await AsyncStorage.getItem("balance");
       const uname = await AsyncStorage.getItem("name");
+      const create_at = (await AsyncStorage.getItem("created_at")) ?? "";
 
-      setName(uname ?? "Sarower");
+      setCardNumber(
+        create_at?.slice(0, 4) +
+          create_at?.slice(5, 10).replace("-", "") +
+          id?.padStart(8, "0")
+      );
+      setName(uname ?? "Sadia");
       setBalance(ubalance ?? "0");
     };
 
     getData();
-  }, []);
+    refetch();
+  }, [isFocused]);
 
   const services = [
     {
@@ -66,10 +84,10 @@ const DashboardScreen = () => {
   return (
     <Container>
       <CreditCard
-        cardNumber="1234567812345678"
+        cardNumber={cardNumber}
         cardHolder={name}
         expiryDate="12/30"
-        balance={balance}
+        balance={data?.balance}
       />
       <View style={styles.services}>
         {services.map((item, index) => (
@@ -77,7 +95,10 @@ const DashboardScreen = () => {
             key={index}
             style={styles.serviceItem}
             onPress={() => {
-              router.push("/(screens)/ServiceScreen");
+              router.push({
+                pathname: "/(screens)/ServiceScreen",
+                params: { type: item.name }, // Parameters to pass
+              });
             }}
           >
             <Image source={item.icon} style={styles.serviceIcon} />

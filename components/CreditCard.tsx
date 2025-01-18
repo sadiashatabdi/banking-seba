@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   View,
   Text,
@@ -34,7 +34,7 @@ const CreditCard: React.FC<CreditCardProps> = ({
       >
         <View style={styles.topSection}>
           <Pressable>
-            <Text style={styles.bankName}>C/B: {balance} TK</Text>
+            <Text style={styles.bankName}>Balance: {balance} TK</Text>
           </Pressable>
           <Text style={styles.bankName}>Banking Seba</Text>
         </View>

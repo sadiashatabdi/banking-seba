@@ -1,115 +1,95 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, Alert } from 'react-native';
-import { Formik } from 'formik';
-import * as Yup from 'yup';
+import React from "react";
+import { View, StyleSheet, Alert } from "react-native";
+import { Formik } from "formik";
+import * as Yup from "yup";
+import { useMutation } from "@tanstack/react-query";
+import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import Input from '@/components/ui/Input';
-import Button from '@/components/ui/Button';
-import Gap from '@/components/ui/Gap';
-import { useNavigation } from '@react-navigation/native';
+import Input from "@/components/ui/Input";
+import Button from "@/components/ui/Button";
+import Gap from "@/components/ui/Gap";
+import Api from "@/services/Api";
 
 interface ProfileFormValues {
   name: string;
-  email: string;
-  phone: string;
-  password: string;
-  confirmPassword: string;
 }
 
 const UpdateProfileScreen: React.FC = () => {
-  const navigation = useNavigation()
+  const navigation = useNavigation();
   const initialValues: ProfileFormValues = {
-    name: '',
-    email: 'user@example.com',  // Example email
-    phone: '9876543210',  // Example phone
-    password: '',
-    confirmPassword: '',
+    name: "",
   };
+
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: (payload) => Api.put("profile/update", payload, false),
+  });
 
   const validationSchema = Yup.object({
     name: Yup.string()
-      .min(4, 'Name must be at least 4 characters')
-      .max(30, 'Name must be less than 30 characters')
-      .required('Name is required'),
-    password: Yup.string()
-      .min(6, 'Password must be at least 6 characters')
-      .max(16, 'Password cannot be more than 16 characters')
-      .matches(/[a-zA-Z]/, 'Password must contain letters')
-      .matches(/\d/, 'Password must contain a number')
-      .required('Password is required'),
-    confirmPassword: Yup.string()
-      .oneOf([Yup.ref('password')], 'Passwords must match')
-      .required('Confirm Password is required'),
+      .min(4, "Name must be at least 4 characters")
+      .max(30, "Name must be less than 30 characters")
+      .required("Name is required"),
   });
 
-  const handleSubmit = (values: ProfileFormValues) => {
+  const handleSubmit = (values: any) => {
     // Submit the form and show an alert (you can send this data to an API)
-    Alert.alert('Profile Updated', `Name: ${values.name}\nPassword: ${values.password}`);
+    mutateAsync(values, {
+      onSuccess: () => {
+        AsyncStorage.setItem("name", values.name);
+        Alert.alert("Success", "Your profile updated");
+      },
+      onError: (error) => {
+        Alert.alert("Update Error", error.message);
+      },
+    });
+  };
+
+  const handleLogout = async () => {
+    AsyncStorage.removeItem("token");
+    AsyncStorage.removeItem("balance");
+    AsyncStorage.removeItem("email");
+    AsyncStorage.removeItem("id");
+    AsyncStorage.removeItem("name");
+    AsyncStorage.removeItem("phone");
+    AsyncStorage.removeItem("status");
+    AsyncStorage.removeItem("created_at");
+    navigation.navigate("(screens)" as never);
   };
 
   return (
     <View style={styles.container}>
-
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
-        {({ values, handleChange, handleBlur, handleSubmit, touched, errors }) => (
+        {({
+          values,
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          touched,
+          errors,
+        }) => (
           <View>
             {/* Name (Editable) */}
             <Input
               placeholder="Name"
               value={values.name}
-              onChangeText={handleChange('name')}
-              onBlur={handleBlur('name')}
+              onChangeText={handleChange("name")}
+              onBlur={handleBlur("name")}
               touched={touched.name}
               errorMessage={errors.name}
             />
 
-            <Input
-              placeholder="Name"
-              value={values.email}
-              onChangeText={handleChange('email')}
-              onBlur={handleBlur('email')}
-              touched={touched.email}
-              errorMessage={errors.email}
-              disabled={true}
+            <Button
+              title="Update Profile"
+              variant="dark"
+              onPress={() => handleSubmit()}
             />
-
-            <Input
-              placeholder="Phone"
-              value={values.phone}
-              onChangeText={handleChange('phone')}
-              onBlur={handleBlur('phone')}
-              touched={touched.phone}
-              errorMessage={errors.phone}
-              disabled={true}
-            />
-
-            <Input
-              placeholder="Password"
-              value={values.password}
-              onChangeText={handleChange('password')}
-              onBlur={handleBlur('password')}
-              touched={touched.password}
-              errorMessage={errors.password}
-              isPassword={true}
-              secureTextEntry={true}
-            />
-            <Input
-              placeholder="Confirm Password"
-              value={values.confirmPassword}
-              onChangeText={handleChange('confirmPassword')}
-              onBlur={handleBlur('confirmPassword')}
-              secureTextEntry={true}
-              isPassword={true}
-              touched={touched.confirmPassword}
-              errorMessage={errors.confirmPassword}
-            />
-            <Button title="Update Profile" variant='dark' onPress={() => handleSubmit()} />
             <Gap size={50} />
-            <Button title="Logout" variant='light' onPress={() => navigation.navigate('(screens)' as never)} />
+            <Button title="Logout" variant="light" onPress={handleLogout} />
           </View>
         )}
       </Formik>
@@ -123,24 +103,24 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   input: {
-    width: '100%',
+    width: "100%",
     height: 40,
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     borderWidth: 1,
     marginBottom: 10,
     paddingLeft: 8,
     borderRadius: 5,
   },
   error: {
-    color: 'red',
+    color: "red",
     fontSize: 12,
     marginBottom: 10,
   },
   passwordContainer: {
-    position: 'relative',
+    position: "relative",
   },
   eyeIcon: {
-    position: 'absolute',
+    position: "absolute",
     right: 10,
     top: 10,
     padding: 5,
